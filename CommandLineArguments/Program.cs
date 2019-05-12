@@ -2,49 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CommandLineArguments
 {
     class Program
     {
+        static List<string> Args;
+       static List<string> Flags;
+
         static void Main(string[] args)
         {
-            Stack<String> Args = new Stack<String>(args.Reverse());
+            Args = new List<string>(args);
+            ParserFlags();
 
-            string Verb;
+            Console.WriteLine($"Flags: {String.Join(",",Flags)}");
+            Console.WriteLine($"Args: {String.Join(",",Args)}");
 
-            #region Get Verb using  if - esle
 
-            if (Args.Count >= 1)
-            {
-                Verb = Args.Pop();
+        }
+
+        static void ParserFlags() {
+            foreach (string Arg in Args) {
+                if (new Regex(@"^--").IsMatch(Arg)) Flags.Add(Arg);
             }
-            else
-            {
-                Verb = "";
-                Console.WriteLine("Not set parameters");
-                Environment.Exit(0);
-
-            }
-            #endregion
-
-
-
-            Console.WriteLine($"Verb: {Verb}");
-
-            switch (Verb.ToUpper()) {
-                case "FILE":
-                    Console.WriteLine($"Hello , file name is:  {Args.Pop()}");
-                    break;
-                case "HELP":
-                    Console.WriteLine("Dis programs is test parameters for program");
-                    break;
-                default:
-                    Console.WriteLine("Not parse parameters");
-                    break;
-            }
-
         }
     }
 }
